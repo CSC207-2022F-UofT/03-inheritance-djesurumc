@@ -5,6 +5,10 @@
  * 1. Introduction to Java helpful.
  */
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class Bag {
     /*
      * TODO: Create the following private instance variables
@@ -13,7 +17,10 @@ public abstract class Bag {
      *       - an int named capacity
      *       - an array of Strings named contents
      */
-
+    private String color;
+    private int numberOfContents;
+    private int capacity;
+    private String[] contents;
 
 
 
@@ -26,7 +33,12 @@ public abstract class Bag {
      * be empty (e.g. numberOfContents is 0 and an empty String array for
      * its contents.)
      */
-
+    public Bag(String colour, int capacity) {
+        this.color = colour;
+        this.numberOfContents = 0;
+        this.capacity = capacity;
+        this.contents = new String[capacity];
+    }
 
 
 
@@ -38,16 +50,26 @@ public abstract class Bag {
      *           - getCapacity
      */
 
+    public String getColor() {
+        return color;
+    }
 
+    public int getNumberOfContents() {
+        return numberOfContents;
+    }
 
+    public int getCapacity() {
+        return capacity;
+    }
 
     /*
      * TODO: Create a setter function called setColor which sets the
      *       color of this bag to the given color.
      */
 
-
-
+    public void setColor(String color) {
+        this.color = color;
+    }
 
 
     /*
@@ -61,7 +83,41 @@ public abstract class Bag {
      *       and false otherwise.
      */
 
+    private int numberOfItems(){
+        int count = 0;
 
+        for (String item : contents) {
+            if (item != null) {
+                count += 1;
+            }
+        }
+
+        return count;
+    }
+    public boolean addItem(String item){
+        int numberOfItems = this.numberOfItems();
+        if(numberOfItems < this.capacity) {
+            List<String> tempList = new ArrayList<String>();
+
+            for(String check : this.contents) {
+                if(check != null) {
+                    tempList.add(check);
+                }
+            }
+
+            tempList.add(item);
+            String[] tempArray = new String[this.capacity];
+            tempList.toArray(tempArray);
+
+            this.contents = tempArray;
+            this.numberOfContents = numberOfContents + 1;
+
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 
 
 
@@ -75,6 +131,36 @@ public abstract class Bag {
      *
      * @return
      */
+    public String popItem() {
+        int numberOfItems = numberOfItems();
+
+        if(numberOfItems == 0) {
+            return null;
+        } else {
+            List<String> tempList = new ArrayList<String>();
+
+            for (String item : contents) {
+                if(item != null) {
+                    tempList.add(item);
+                }
+            }
+
+            int lastIndex = tempList.size() -1;
+
+            String lastItem = tempList.get(lastIndex);
+
+            tempList.remove(lastIndex);
+
+            String[] tempArray = new String[this.capacity];
+
+            tempList.toArray(tempArray);
+
+            this.numberOfContents += -1;
+
+            return lastItem;
+
+        }
+    }
 
 
 
@@ -87,6 +173,13 @@ public abstract class Bag {
      */
     public void increaseCapacity(int n) {
         // TODO: Implement this method.
+
+        this.capacity += n;
+
+        String[] tempArray = new String[this.contents.length + n];
+        System.arraycopy(this.contents, 0, tempArray, 0, this.contents.length);
+
+        this.contents = tempArray;
 
     }
 
